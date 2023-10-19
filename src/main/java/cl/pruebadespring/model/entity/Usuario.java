@@ -1,17 +1,20 @@
 package cl.pruebadespring.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -32,15 +35,14 @@ public class Usuario implements Serializable{
 	private String name;
 	
 	@Column(nullable = false, unique = true, length = 45)
-	@Pattern(regexp="^[A-Za-z0-9+_.-]+@(.+)$", message="El correo debe seguir una expresión regular")
+//	@Pattern(regexp="^[A-Za-z0-9+_.-]+@(.+)$")
 	private String email;
 	
 	@Column(nullable = false, length = 64)
 	private String password;
 	
-	@ManyToOne
-	@JoinColumn(name = "phone_id")
-	private Phone phones;
+	@OneToMany(cascade = CascadeType.PERSIST)
+	private List<Phone> phones = new ArrayList<>();
 	
 	
 	@Column(name = "create_at")
@@ -64,9 +66,6 @@ public class Usuario implements Serializable{
 		this.modified = new Date();
 		this.lastLogin = new Date();
 	}
-	
-
-
 
 	public Long getId() {
 		return id;
@@ -100,6 +99,14 @@ public class Usuario implements Serializable{
 		this.password = password;
 	}
 
+	public List<Phone> getPhones() {
+		return phones;
+	}
+
+	public void setPhones(List<Phone> phones) {
+		this.phones = phones;
+	}
+
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -115,24 +122,6 @@ public class Usuario implements Serializable{
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
-
-
-	
-
-
-	public Phone getPhones() {
-		return phones;
-	}
-
-
-
-
-	public void setPhones(Phone phones) {
-		this.phones = phones;
-	}
-
-
-
 
 	public Date getLastLogin() {
 		return lastLogin;
