@@ -16,6 +16,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "usuarios")
@@ -31,6 +32,7 @@ public class Usuario implements Serializable{
 	private String name;
 	
 	@Column(nullable = false, unique = true, length = 45)
+	@Pattern(regexp="^[A-Za-z0-9+_.-]+@(.+)$", message="El correo debe seguir una expresión regular")
 	private String email;
 	
 	@Column(nullable = false, length = 64)
